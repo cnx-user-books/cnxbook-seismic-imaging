@@ -1,0 +1,13 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
+	<title>Introduction to Seismic Imaging</title>
+	<metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>e66eb014-a09a-4205-9674-84758b482b8d</md:uuid>
+</metadata>
+	<content>
+		<para id="wheeeeeeeeeeeee"><!-- Insert module text here -->Living in a time where natural resources are scarce and precious, it is important to find accurate ways of mapping surfaces such as underwater landmarks or the Earth’s interior.  A considerable amount of money and effort has been spent on the field of reflection seismology, the science of collecting echoes and transforming them into images of surfaces.</para>
+		<para id="abumbaway">One method to accomplish such a task is multi-offset Kirchoff migration.  This technique employs various sources and receivers placed apart from each other.  Each source fires an acoustical pulse that reflects off of the surface to be mapped.  The echo is then collected at each receiver.</para>
+		<para id="ahhhhhhhahahahhhhhhh">Our goal was to construct a digital image of a reflecting surface based on the time delays between the generated and received pulses.<figure id="overview_image">
+				<media id="idp443216" alt=""><image src="../../media/ship.jpg" mime-type="image/jpeg"/></media>
+				<caption>Artist's rendering of an imaging experiment.</caption>
+			</figure></para>
+	</content>
+</document>

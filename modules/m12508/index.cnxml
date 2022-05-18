@@ -1,0 +1,42 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
+	<title>Seismic Imaging Project Results</title>
+	<metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>e8d7dc07-cf9e-43a5-b534-91d8b5dc4779</md:uuid>
+</metadata>
+	<content>
+		<para id="creap">Now we come to the results of our work</para>
+		<para id="prashant">First we fed this picture into our imaging system as a simple example:<figure orient="vertical" id="mountain">
+				<media id="idm1163872" alt=""><image src="../../media/surface_w_mountain.gif" mime-type="image/gif"/></media>
+				<caption>A surface with a mountain.</caption>
+			</figure></para>
+		<para id="phil">This system had no added noise, i.e. we are imaging the pure signal. This is what we got:<figure orient="vertical" id="imaged_mountain">
+				<media id="idm2337216" alt=""><image src="../../media/surface.gif" mime-type="image/gif"/></media>
+				<caption>The surface with a mountain after it has been run through the entire process.</caption>
+			</figure></para>
+		<para id="settyman">We see the horizontal plane is very clearly resolved. This is because most of the incident power is received by the receivers. The mountain is a little faint compared to the horizontal plane. This is because of the slanting nature of the surface: i.e. not all of the power is reflected towards the receiver; a sizeable amount of it is reflected off at odd angles and never reaches the receivers.</para>
+		<para id="room110">Let’s take a look at the blowup of the mountain itself. We see that the mountain is still clearly resolved against the background. We see that the slope is stepped: this is because we image the edges of each pixel at a time. The side of the mountain facing the sources is imaged still clearer than the lee side since very few source waves manage to reflect off the lee side.<figure orient="vertical" id="closeup_mountain">
+				<media id="idp283456" alt=""><image src="../../media/mountain.gif" mime-type="image/gif"/></media>
+				<caption>A close-up of the mountain.</caption>
+			</figure></para>
+		<para id="tedjohn">Lets take a look at another more complex image:<figure orient="vertical" id="ELEC">
+				<media id="idm8298720" alt=""><image src="../../media/ELEC.gif" mime-type="image/gif"/></media>
+				<caption>ELEC</caption>
+			</figure></para>
+		<para id="keiko">This picture data came with “juicy” noise. Below we have imaged both the filtered and unfiltered versions of this data set.<figure orient="horizontal" id="ELECimaged">
+				<subfigure id="idp1065184">
+					<media id="idm930384" alt=""><image src="../../media/ELEC_unfiltered.gif" mime-type="image/gif"/></media>
+					<caption>ELEC imaged without filtering of the raw data.</caption>
+				</subfigure>
+				<subfigure id="sub1">
+					<media id="idm9576336" alt=""><image src="../../media/ELEC_filtered.gif" mime-type="image/gif"/></media>
+					<caption>ELEC imaged with filtering of the raw data.</caption>
+				</subfigure>
+				<caption>ELEC images.</caption>
+			</figure></para>
+		<para id="discord">We notice in both we can make out the horizontal surface portions of the middle E and L. The horizontal portions are pretty much lost. The first E not really visible and the top curve of the C is faintly visible. The filtered portion does have better resolution than its unfiltered counterpart: The outer sides are smudged in the unfiltered one and the C in particular is more visible in the filtered version. The horizontal portions in the center E and L return so much of the signal that the noise is overwhelmed for the most part. We understand that filtering is most visible in the detailed parts of the picture which is why the horizontal surfaces are clearly resolved in both the filtered and unfiltered whereas the outer regions of the picture have smudges in the unfiltered version that vanish in the filtered version.</para>
+		<para id="gujarati">So what have we learned about our imaging process:</para>
+		<para id="texan"><quote display="inline" class="no-marks">1. Horizontal surfaces are clearly visible since they return so much of the power sent to them straight back to the receivers.</quote></para>
+		<para id="newjoysian"><quote display="inline" class="no-marks">2. Positions of the sources and receivers matter. Had not the first E been out of source-receiver range, we could have gotten more clarity.</quote></para>
+		<para id="guyton"><quote display="inline" class="no-marks">3. Vertical surfaces are exceedingly difficult to image, given the positions of sources and receivers we are using.</quote></para>
+		<para id="baraniuk"><quote display="inline" class="no-marks">4. Good resolution at high elevations. Algorithm needs to be modified if it has to deal with multiple layers of surfaces.</quote></para>
+	</content>
+</document>

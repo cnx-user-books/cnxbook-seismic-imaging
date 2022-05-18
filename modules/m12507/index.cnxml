@@ -1,0 +1,35 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Overview of the Seismic Imaging Project</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>41180038-31dd-441d-bb40-0a29793791a7</md:uuid>
+</metadata>
+
+  <content>
+
+  <para id="Into">
+Having demonstrated how Kirchhoff Imaging techniques work, we may now outline and perform a brief demonstration of their implementations.  In this section, we will give a general overview of our procedure and our model.</para>
+
+    <para id="Variables_in_the_Iing_Experiments">
+First we created bitmap images that represented surfaces to be imaged.  We used two different images in this experiment, one of a mountain and one of the word "ELEC."  We use these images to compare to the output of our imaging code.  
+    </para>
+
+    <para id="Multiple_Reflect_Layers">
+We gave these files to Dr. Bill Symes who ran a simulated sesimic survey and returned time series vectors to us that represeneted the sound signals received.     </para>
+
+
+    <figure id="fig1">
+	    <title>Process Steps</title>
+	    <media id="idm780656" alt=""><image src="../../media/blockdiagram.gif" mime-type="image/gif"/></media>
+	    <caption>Dr. Symes simulated the survey and then we processed the resulting time vectors</caption>
+    </figure>
+
+  <para id="Int">
+First we filtered our time vectors to eliminate any noise that may have been added in the survey.  The image of the mountain was processed with no noise and the image of "ELEC" was processed with noise.  When noise was present we analyzed the vectors in both the time and frequency domains to compare the effectiveness of our various algorithms</para>
+
+    <para id="Variables_in_t_Iing_Experiments">
+Finally we sent our filtered vectors to our imaging program that attempted to reconstruct the image by caluculating the ellipses of possible surface locations and adding them all up.  The final results were analyzed to discuss the overall effectiveness of the procedure. </para>
+
+
+
+  </content>
+  
+</document>

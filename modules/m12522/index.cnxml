@@ -1,0 +1,233 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+	<title>The Wiener Filter</title>
+	<metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>4c5042af-267e-4d97-bf2d-6a1d7d361046</md:uuid>
+</metadata>
+	<content>
+		<para id="intro"><!-- Insert module text here -->The wiener filter is an adaptive filter. It tailors itself to be the “best possible filter” for a given dataset. Below is a simplistic version of the derivation for the wiener formula.</para>
+		<section id="the_math">
+			<para id="dummy"/>
+		</section>
+		<para id="noise_eqn">Consider our standard equation to model a signal with noise:<equation id="noise_signal">
+<m:math>
+  <m:apply>
+    <m:eq/>
+    <m:apply>
+      <m:ci type="function" class="discrete">y</m:ci>
+      <m:ci>n</m:ci>
+    </m:apply>
+    <m:apply>
+      <m:plus/>
+      <m:apply>
+<m:ci type="function" class="discrete">x</m:ci>
+<m:ci>n</m:ci>
+      </m:apply>
+      <m:apply>
+<m:ci type="function" class="discrete">n</m:ci>
+<m:ci>n</m:ci>
+      </m:apply>
+    </m:apply>
+  </m:apply>
+</m:math>
+      </equation>
+</para>
+		<para id="times_we_had">We want to pass this y[n] through a filter ‘h’ such that we get back something that very closely resembles our original signal x, i.e. x.</para>
+		<para id="not_at_all">So basically we want to design a filter that minimizes the difference between x and x.  Lets start out by minimizing the least mean square error between x and x. <equation id="least-sq-1">
+<m:math>
+  <m:apply>
+      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#norm"/>
+      <m:domainofapplication>
+<m:cn>2</m:cn>
+      </m:domainofapplication>
+      <m:apply>
+<m:minus/>
+<m:ci>x</m:ci>
+<m:ci><m:mover><m:mi>x</m:mi><m:mo>˜</m:mo></m:mover></m:ci>
+      </m:apply>
+  </m:apply>
+</m:math>
+</equation>
+</para>
+		<para id="stan">But we know x is h*y (h convolved with y), so we have:<equation id="least-sq-2">
+<m:math>
+  <m:apply>
+  
+      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#norm"/>
+      <m:domainofapplication>
+<m:cn>2</m:cn>
+      </m:domainofapplication>
+      <m:apply>
+<m:minus/>
+<m:ci>x</m:ci>
+<m:apply>
+  <m:times/>
+  <m:ci>x</m:ci>
+  <m:ci>*</m:ci>
+  <m:ci>y</m:ci>
+</m:apply>
+    </m:apply>
+  </m:apply>
+</m:math>
+      </equation>
+     </para>
+		<para id="feel_to_be_the_man">We can expand this expression known algebraic rules. Then we can take the Fourier transform of the expression to find the power spectra.<equation id="fft_y">
+				
+<m:math>
+<m:apply>
+  <m:sum/>
+    <m:domainofapplication>
+      <m:ci>j</m:ci>
+    </m:domainofapplication>
+    <m:apply>
+    <m:power/>
+    <m:apply>
+      <m:minus/>
+      <m:ci><m:msub><m:mi>X</m:mi><m:mi>j</m:mi></m:msub></m:ci>
+      <m:apply>
+<m:times/>
+<m:ci><m:msub><m:mi>H</m:mi><m:mi>j</m:mi></m:msub></m:ci>
+<m:ci><m:msub><m:mi>Y</m:mi><m:mi>j</m:mi></m:msub></m:ci>
+      </m:apply>
+    </m:apply>
+    <m:cn>2</m:cn>
+  </m:apply>
+</m:apply>
+</m:math>
+      </equation>
+
+      
+    
+    <equation id="fft_x_n">
+
+<m:math>
+  <m:apply>
+    <m:sum/>
+    <m:domainofapplication>
+      <m:ci>j</m:ci>
+    </m:domainofapplication>
+    <m:apply>
+      <m:power/>
+      <m:apply>
+<m:minus/>
+<m:ci><m:msub><m:mi>X</m:mi><m:mi>j</m:mi></m:msub></m:ci>
+<m:apply>
+  <m:times/>
+  <m:ci><m:msub><m:mi>H</m:mi><m:mi>j</m:mi></m:msub></m:ci>
+  <m:apply>
+    <m:plus/>
+    <m:ci><m:msub><m:mi>X</m:mi><m:mi>j</m:mi></m:msub></m:ci>
+    <m:ci><m:msub><m:mi>N</m:mi><m:mi>j</m:mi></m:msub></m:ci>
+  </m:apply>
+</m:apply> 
+      </m:apply>
+      <m:cn>2</m:cn>
+    </m:apply>
+  </m:apply>
+</m:math>
+      </equation></para>
+		<para id="textbook_hippie_man">We minimize this expression over H and in the end after all the simplification we get the following formula for H, our filter optimized to minimize the difference between x and x.<equation id="wiener_final">
+<m:math>
+  <m:apply>
+    <m:eq/>
+    <m:apply>
+      <m:ci type="fn">H</m:ci>
+      <m:ci>f</m:ci>
+    </m:apply>
+    <m:apply>
+      <m:divide/>
+      <m:apply>
+<m:power/>
+<m:apply>
+  <m:abs/>
+  <m:apply>
+    <m:ci>X</m:ci>
+    <m:ci>f</m:ci>
+  </m:apply>
+</m:apply>
+<m:cn>2</m:cn>
+      </m:apply>
+      <m:apply>
+<m:plus/>
+<m:apply>
+  <m:power/>
+  <m:apply>
+    <m:abs/>
+    <m:apply>
+      <m:ci>X</m:ci>
+      <m:ci>f</m:ci>
+    </m:apply>
+  </m:apply>
+  <m:cn>2</m:cn>
+</m:apply>
+<m:apply>
+  <m:power/>
+  <m:apply>
+    <m:abs/>
+    <m:apply>
+      <m:ci>N</m:ci>
+      <m:ci>f</m:ci>
+    </m:apply>
+  </m:apply>
+  <m:cn>2</m:cn>
+</m:apply>
+      </m:apply>
+    </m:apply>
+  </m:apply>
+</m:math>
+      </equation>
+
+</para>
+		<para id="to_be_the_man">Where X(f) is the power of the signal and N(f) is the power of the noise. </para>
+		<para id="these">Just by inspection we can see that this filter will take care of the basics. For example when there is no noise, the filter response goes to just 1. When the signal is 0 the filter response goes to 0.</para>
+		<para id="m_period_fresh_comma">Notice to use this filter we will need to know the power spectrum of the actual signal. We also need to estimate the power spectrum of the noise. In real life this is done in numerous ways. Oftentimes out of convenience engineers will approximate the noise to Gaussian. This works well with varying results.</para>
+		<section id="idp2893808">
+			<title>Building the Filter</title>
+			<para id="blahgadfg"/>
+		</section>
+		<para id="she_coming_with_me">One way to approximate the noise is “by inspection” or what is more commonly known as “guess and check”. In this method, you take a close look at your received signal and your pure signal.<figure orient="vertical" id="pure_signal">
+				<media id="idm7378288" alt=""><image src="../../media/wiener_2.gif" mime-type="image/gif"/></media>
+				<caption>Pure signal spectrum.</caption>
+			</figure><figure orient="vertical" id="received_signal">
+				<media id="idp2160720" alt=""><image src="../../media/noise_power.jpg" mime-type="image/jpeg"/></media>
+				<caption>Received signal spectrum.</caption>
+			</figure></para>
+		<para id="rock_the_casbah">Then we try to figure out what the noise could look like based on this information. For this data set, we have traced out our “best guess” for the noise spectrum below <figure orient="vertical" id="spectrum_w_noise">
+				<media id="idp6999568" alt=""><image src="../../media/wiener_1.gif" mime-type="image/gif"/></media>
+				<caption>Noise trace.</caption>
+			</figure></para>
+		<para id="she_really_dont_like_it">Just by looking at the noise spectrum we want, we look for patterns we could fit a mathematical formula to. In this example you can see that the function decays like a polynomial on one side and exponentially on the other. </para>
+		<para id="dumdumdum">So our general noise toggling function becomes:<equation id="noise_formula">
+				<m:math/>
+			</equation></para>
+		<para id="counting_crows">And so we fix our parameters alpha, beta and gamma until we get something that resembles the function we drew in red earlier. <note type="Note" id="nothin_bout_love"><label>Note</label>This function is particular to this data set. For other types of noise, you would have to fit a new appropriate noise function.  </note></para>
+		<para id="breakfast">So now using the values we calculated for X(f) and N(f) we create our wiener filter.<figure orient="vertical" id="wiener_filter">
+				<media id="idp6717984" alt=""><image src="../../media/wiener_magnitude.jpg" mime-type="image/jpeg"/></media>
+				<caption>Magnitude Plot of the Wiener filter.</caption>
+			</figure></para>
+		<para id="now_your_eyes_see_thru_me">So lets try the filter on the data shall we?<figure orient="horizontal" id="data_unfiltered">
+				<subfigure id="idm6276480">
+					<media id="idp2049792" alt=""><image src="../../media/wiener_3.gif" mime-type="image/gif"/></media>
+					<caption>Unfiltered data.</caption>
+				</subfigure>
+				<subfigure id="idp6726192">
+					<media id="idp6726640" alt=""><image src="../../media/wiener_4.gif" mime-type="image/gif"/></media>
+					<caption>Filtereddata.</caption>
+				</subfigure>
+			</figure></para>
+		<para id="and_i_said_what_about_breakfast_at_tiffanys">We see that the wiener filter does its job pretty well. It even wins over the bandpass filter in the simpler example since it even removes the excess amplitude added by the noise.</para>
+		<para id="she_said_i_think_i_remember_the_film">Lets take a look at the image of all the time series vectors.<figure orient="vertical" id="time_vector">
+				<media id="idp2684000" alt=""><image src="../../media/time_series_vector.gif" mime-type="image/gif"/></media>
+				<caption>A single unfiltered time series vector.</caption>
+			</figure><figure orient="horizontal" id="time_unf_fil">
+				<subfigure id="idp1697760">
+					<media id="idp1698208" alt=""><image src="../../media/E_raw.gif" mime-type="image/gif"/></media>
+					<caption>Image of unfiltered time vectors.</caption>
+				</subfigure>
+				<subfigure id="idm6027088">
+					<media id="idm6026608" alt=""><image src="../../media/E_filtered.gif" mime-type="image/gif"/></media>
+					<caption>Image of filtered time vectors.</caption>
+				</subfigure>
+			</figure></para>
+		<para id="yeah_ill_be_there">We can see that the unfiltered image is pretty blurry with not much distinguishable from the background. On the other hand the picture of the filtered version comes out pretty well and we can see distinct values for every time series.</para>
+		<para id="nothing_in_life_will_ever_come_that_easy">So that concludes the section on filtering. Hopefully you have a better understanding on how to design adaptive filters, the wiener filter in particular. Now its time to move the data to the next stage of the process: Imaging.</para>
+	</content>
+</document>

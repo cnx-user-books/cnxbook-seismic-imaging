@@ -1,0 +1,78 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Possible Extensions to the Seismic Imaging Project</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>07709caf-370c-4e42-96af-fd016bc68376</md:uuid>
+</metadata>
+
+  <content>
+
+    <para id="Intro">
+We hope that we have succeeded in covering the basics of seismic image reconstruction, but we know that there are many more problems to be explored in this area.  For those readers interested in learning more about these topics, here are some ideas for extensions that we hope will be helpful to your endeavors.  
+    </para>
+
+    <para id="Variables_in_the_Imaging_Experiments">
+We showed many different aspects of this technique through our simulations, but there are still many factors in our simulation model that could be varied to gain greater insight.  For instance, we used the same positioning of sources and receivers in both tests.  From the imaging of “ELEC”, we saw that there were forms at the edges of the map that we could not resolve clearly.  A good and simple modification to our experiment would be to compare images of the same map, using different source and receiver positions.  Another good experiment would be to use surfaces with greater detail.  It would be interesting to see how these surfaces would resolve and it would also provide a better test for our filtering algorithms to see how they affect detailed images.
+    </para>
+
+    <para id="Multiple_Reflection_Layers">
+Additionally, our Imaging code assumes that there are two uniform media, one of which reflects the pulse entirely and one of which transmits it entirely.  We did not account for layers of different types or for multiple reflections within the surfaces themselves.  Either of these considerations would increase the complexity of the imaging code but would give it greater flexibility for resolving different types of surfaces.  Creating a test image for this would be fairly easy.
+    </para>
+
+
+    <figure id="fig1">
+	    <title>Multiple Reflection Layers</title>
+	    <media id="idp390496" alt=""><image src="../../media/multi_refl.png" mime-type="image/png"/></media>
+	    <caption>One possible extension is to consider the possibility of 
+             multiple reflections.</caption>
+    </figure>
+
+   
+
+    <para id="Unknown_Velocity">
+Another factor that our algorithm depends on is using a known speed of sound in the medium we are imaging.  In practice this is a precarious assumption to make.  However, the speed can be calculated fairly reliably by a test using one pulse and two different receivers.  Comparing data from these two receivers would allow you to calculate the velocity.  This is a dimension of realism that could be added fairly easily.
+    </para>
+    
+    <para id="Filter_estimation">
+Our estimation of the noise power was fairly crude, and we felt that the Wiener filtering could have easily been made stronger by either studying more detailed noise profiles or using a statistical method to fit the estimator function.   Alternatively, we might use Fourier analysis to isolate the noise spectrum from the spectrum of the signal plus noise.
+    </para>
+
+    <para id="Radon_Transforms_and_Deconvolution">
+Finally, we have discussed one very straight forward way of interpreting the data: filtering the vectors one by one and plotting the corresponding ellipses and summing the results.  However, there should be other ways of analyzing this data in order to see shapes and pictures.  Learning about Deconvolution or Radon Transform algorithms and comparing resolution and filtering techniques would be a great new dimension to add to a future project.
+    </para>
+
+<section id="ack">
+<title>Acknowledgements</title>
+<para id="ackno">
+http://www.trip.caam.rice.edu/
+      "Introduction to the   
+       Mathematics of Seismic   
+       Inverse Scattering," CAAM 
+      Graduate Research Seminar,
+      September 1, 2004.
+      (Photograph of surface ship firing 
+       waves at ocean floor and diagram of ellipses taken 
+       from this source)
+</para>
+<para id="leroy_brown">
+http://www.trip.caam.rice.edu/
+"Short Course on Mathematical  
+       Foundations of
+       Reflection Seismology,“
+       Summer 2004.
+</para>
+ 
+<para id="itunes">
+http://oldsite.vislab.usyd.edu.au/
+       Rosalind Wang, "Wiener 
+       Filtering.“
+</para>
+
+<para id="baddestman">
+And most of all, an enormous thanks to Dr. Bill
+  Symes for simulating the reflection
+  data and guiding us in our work.
+</para>
+
+</section>  
+  </content>
+  
+</document>

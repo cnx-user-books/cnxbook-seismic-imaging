@@ -1,0 +1,620 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Comparing Seismic Imaging Algorithms</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>9586d9dc-8acd-49ad-a597-42ce3c7d88a5</md:uuid>
+</metadata>
+
+  <content>
+    <para id="delete_me">
+       <!-- Insert module text here -->
+    </para>
+
+    <para id="Background">
+        The data from a seismic survey appears in the form of time series vectors, representing samples of the received acoustic signals over a fixed period of time.  In our simulation example, the samples come every 4 ms (Fs = 250 Hz) and the vectors are 512 samples (2.048 s) in length.  There is one time vector for each source/receiver combination, so for our example, we have 32 sources and 128 receivers for a total of 4096 time vectors.  Therefore, our raw data will be represented as a 512x4096 matrix which we will load into MATLAB.
+    </para>
+
+    <para id="Intro">
+At this point, it is necessary to process this matrix and map this data onto a grid so that the shape of the formations we are studying may be determined.  The basic technique involving ellipses has been described above, so all the program needs to do is to draw the ellipses, weighted by the magnitude of the time samples, and add the results for each time vector.
+    </para>
+
+    <para id="algo">
+We consider now, two possible algorithms for drawing the necessary ellipses.  The first method will traverse every pixel on the grid and at each point plot the value of the correct sample from the time vector.  The second method will traverse the time vector and for each sample will plot an ellipse of appropriate magnitude.
+</para>
+
+    <para id="comparison_standards">
+What do we need to consider when comparing these two methods?  First of all, there are 4096 vectors so this problem can become computationally very costly.  For each method, we seek to find a standard run-time and evaluate different methods of optimizing this run time.  Additionally, we hope to resolve as clear a picture as possible, so we should compare the graphs of the final answers to see which resolution is clearer.
+    </para>
+
+
+<section id="M1">
+<title>Method 1 – Traversing the Grid</title>
+
+<para id="a">
+For every point, we can calculate the total distance required to travel from the source to that point and then to the receiver using the distance formula on the (X,Y) coordinates of the point, the source, and the receiver.
+</para>
+
+<para id="EQNA">
+<equation id="EQN1">  
+
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+	        <m:ci>D</m:ci>
+	      </m:apply>
+	      <m:apply>
+	        <m:plus/>
+                <m:apply>
+<m:msqrt>
+                 <m:apply>
+                 <m:plus/>
+<m:apply>
+                 <m:power/>
+		 <m:apply>
+                   <m:minus/>
+		   <m:apply>
+			<m:ci>Y</m:ci>
+		   </m:apply>
+		   <m:apply>
+			<m:ci>
+<m:msub>
+		      <m:mi>Y</m:mi>
+		      <m:mi>S</m:mi>
+		    </m:msub>
+
+</m:ci>
+		   </m:apply>
+
+		 </m:apply>
+                  <m:apply>
+
+		<m:cn>2</m:cn>
+		
+                </m:apply>
+                </m:apply>
+<m:apply>
+                 <m:power/>
+		 <m:apply>
+                   <m:minus/>
+		   <m:apply>
+			<m:ci>X</m:ci>
+		   </m:apply>
+		   <m:apply>
+			<m:ci><m:msub>
+		      <m:mi>X</m:mi>
+		      <m:mi>S</m:mi>
+		    </m:msub></m:ci>
+		   </m:apply>
+
+		 </m:apply>
+                  <m:apply>
+
+		<m:cn>2</m:cn>
+		
+                </m:apply>
+                </m:apply>
+
+                 </m:apply>
+ 		</m:msqrt>
+</m:apply>
+
+                <m:apply>
+<m:msqrt>
+                 <m:apply>
+                 <m:plus/>
+<m:apply>
+                 <m:power/>
+		 <m:apply>
+                   <m:minus/>
+		   <m:apply>
+			<m:ci>Y</m:ci>
+		   </m:apply>
+		   <m:apply>
+			<m:ci>
+<m:msub>
+		      <m:mi>Y</m:mi>
+		      <m:mi>R</m:mi>
+		    </m:msub>
+
+</m:ci>
+		   </m:apply>
+
+		 </m:apply>
+                  <m:apply>
+
+		<m:cn>2</m:cn>
+		
+                </m:apply>
+                </m:apply>
+<m:apply>
+                 <m:power/>
+		 <m:apply>
+                   <m:minus/>
+		   <m:apply>
+			<m:ci>X</m:ci>
+		   </m:apply>
+		   <m:apply>
+			<m:msub>
+		      <m:mi>X</m:mi>
+		      <m:mi>R</m:mi>
+		    </m:msub>
+		   </m:apply>
+
+		 </m:apply>
+                  <m:apply>
+
+		<m:cn>2</m:cn>
+		
+                </m:apply>
+                </m:apply>
+
+                 </m:apply>
+ 		</m:msqrt>
+</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+</equation>
+
+    </para>
+
+<para id="b">
+We may now divide by velocity to get the time in seconds, and then we may again divide by the sample period to get an index for the time series vector that corresponds to this point.
+</para>
+<para id="EQNB">
+<equation id="EQN2">  
+
+	  <m:math>
+	    <m:apply>
+	      
+
+<m:eq/>
+	      <m:apply>
+	        <m:msub>
+		  <m:mi>t</m:mi>
+		  <m:mi>i</m:mi>
+		</m:msub> 
+              </m:apply>
+
+	      <m:apply>
+	        
+
+<m:divide/>
+                
+<m:apply>
+                 <m:ci>D</m:ci>
+                </m:apply>
+
+                <m:apply>
+                 <m:times/>
+                  <m:apply>
+                    <m:ci>V</m:ci>
+                  </m:apply>
+                  
+<m:apply>
+                       <m:msub>
+		  <m:mi>T</m:mi>
+		  <m:mi>s</m:mi>
+		</m:msub> 
+                  </m:apply>
+
+</m:apply>
+
+                </m:apply>
+    
+</m:apply>
+</m:math>
+
+</equation>
+</para>
+
+<para id="c">
+Note that this value for time will not be an integer, so we must interpolate using the time series indices above and below it.
+</para>
+<para id="EQNC">
+<equation id="EQN3">  
+
+	  <m:math>
+	    <m:apply>
+	      
+
+<m:eq/>
+	      <m:apply>
+	        <m:msup>
+		  <m:mi>t</m:mi>
+		  <m:mi>+</m:mi>
+		</m:msup> 
+              </m:apply>
+
+
+	    <m:apply>
+	      <m:ci type="fn">ceil</m:ci>
+	     <m:msub>
+		  <m:mi>t</m:mi>
+		  <m:mi>i</m:mi>
+		</m:msub> 
+	    </m:apply>
+	
+</m:apply>
+</m:math>
+
+</equation>
+</para>
+
+<para id="EQND">
+<equation id="EQN4">  
+
+	  <m:math>
+	    <m:apply>
+	      
+
+<m:eq/>
+	      <m:apply>
+	        <m:msup>
+		  <m:mi>t</m:mi>
+		  <m:mi>-</m:mi>
+		</m:msup> 
+              </m:apply>
+
+
+	    <m:apply>
+	      <m:ci type="fn">floor</m:ci>
+	     <m:msub>
+		  <m:mi>t</m:mi>
+		  <m:mi>i</m:mi>
+		</m:msub> 
+	    </m:apply>
+	
+</m:apply>
+</m:math>
+
+</equation>
+</para>
+
+<para id="d">
+A simple linear interpolation method will give us an appropriate value that is weighted based on how close t is to t-minus and t-plus.
+</para>
+
+
+<para id="EQNE">
+<equation id="EQN5">  
+
+<m:math>
+  <m:apply>
+    <m:eq/>
+      <m:apply>
+        <m:ci>Mag</m:ci>              
+      </m:apply>
+      <m:apply>
+<m:plus/>
+<m:apply>
+        <m:times/>
+          <m:apply>
+	      <m:ci type="fn">TimeSeries</m:ci>
+	     <m:msup>
+		  <m:mi>t</m:mi>
+		  <m:mi>-</m:mi>
+		</m:msup> 
+	    </m:apply>
+          
+          <m:apply>
+           <m:minus/>
+<m:apply>
+<m:msup>
+		  <m:mi>t</m:mi>
+		  <m:mi>+</m:mi>
+		</m:msup> 
+</m:apply>
+
+<m:apply>
+<m:msub>
+		  <m:mi>t</m:mi>
+		  <m:mi>i</m:mi>
+		</m:msub> 
+</m:apply>
+
+          </m:apply>
+    </m:apply>
+
+<m:apply>
+        <m:times/>
+          <m:apply>
+	      <m:ci type="fn">TimeSeries</m:ci>
+	     <m:msup>
+		  <m:mi>t</m:mi>
+		  <m:mi>+</m:mi>
+		</m:msup> 
+	    </m:apply>
+          
+          <m:apply>
+           <m:minus/>
+<m:apply>
+<m:msub>
+		  <m:mi>t</m:mi>
+		  <m:mi>i</m:mi>
+		</m:msub> 
+</m:apply>
+
+<m:apply>
+<m:msup>
+		  <m:mi>t</m:mi>
+		  <m:mi>-</m:mi>
+		</m:msup> 
+</m:apply>
+
+          </m:apply>
+    </m:apply>
+
+      </m:apply>
+  </m:apply>
+</m:math>
+
+</equation>
+</para>
+
+
+<para id="e">
+We finish by applying these equations to every point on the grid.  This will trace out the ellipse patterns we desire for a given source-receiver pair.  
+</para>
+
+</section>
+
+<section id="m2">
+<title>Method 2 – Traverse the time vector </title>
+<para id="kk1">
+
+Taking one source-receiver pair's time vector, we first find the distance between the source and receiver. This distance is the minimum distance a signal must traverse. Since each sample in a time vector is 4ms, and we know that a wave travels at 1500m/s, the <emphasis>n</emphasis>th sample in a time vector takes <emphasis>n</emphasis>*4ms to travel <emphasis>n</emphasis>*0.004s*1500m/s. If the <emphasis>n</emphasis>th sample distance less than the distance between the source and receiver, it is ignored since it is bad data. Usually these samples have a received signal value of 0 anyway.
+
+</para>
+
+<para id="kk2">
+If the sample qualifies as valid, we must find the ellipse which satisfies the condition that the sample distance equals the distance to the reflection surface and back. Using ellipse properties, we can see that the points of this ellipse can be found relative either the source or receiver.The equation for the ellipse in polar coordinates <emphasis>(r,phi)</emphasis> from one focus is:
+
+<equation id="polar_radius">
+<m:math>
+<m:apply>
+ <m:eq/>
+<m:mi>r</m:mi>
+ <m:mfrac>
+  <m:mrow>
+   <m:mi>a</m:mi>
+   <m:mo>⁢</m:mo>
+   <m:mrow>
+    <m:mo>(</m:mo>
+    <m:mrow>
+     <m:mn>1</m:mn>
+     <m:mo>-</m:mo>
+     <m:msup>
+      <m:mi>e</m:mi>
+      <m:mn>2</m:mn>
+     </m:msup>
+    </m:mrow>
+    <m:mo>)</m:mo>
+   </m:mrow>
+  </m:mrow>
+  <m:mrow>
+   <m:mrow>
+    <m:mi>e</m:mi>
+    <m:mo>⁢</m:mo>
+    <m:mrow>
+     <m:mi>cos</m:mi>
+     <m:mo>⁡</m:mo>
+     <m:mo>(</m:mo>
+     <m:mi>phi</m:mi>
+     <m:mo>)</m:mo>
+    </m:mrow>
+   </m:mrow>
+   <m:mo>+</m:mo>
+   <m:mn>1</m:mn>
+  </m:mrow>
+ </m:mfrac>
+</m:apply>
+</m:math>
+</equation>
+
+</para>
+
+<para id="kk3">
+where <emphasis>e</emphasis> is the eccentricity of the ellipse, <emphasis>a</emphasis> is the semi-major axes, and <emphasis>c</emphasis> is the distance of the focus to the center of the ellipse. The geometry for finding a and <emphasis>c</emphasis> is shown below:
+<figure id="ellipse_geom">
+<media id="idp1239584" alt=""><image src="../../media/Algo_ellipse.GIF" mime-type="image/gif"/></media>
+<caption>Ellipse geometry.</caption>
+
+</figure>
+</para>
+
+<para id="kk4">
+We know <emphasis>c</emphasis> as the distance between the source and receiver divided by 2. <emphasis>a</emphasis> can be found by realizing that:
+
+<equation id="relationship_a_b_c_ellipse">
+<m:math>
+<m:apply>
+<m:eq/> 
+<m:msup>
+  <m:mi>b</m:mi>
+  <m:mn>2</m:mn>
+ </m:msup>
+<m:mrow>
+   <m:msup>
+    <m:mi>a</m:mi>
+    <m:mn>2</m:mn>
+   </m:msup>
+  <m:mo>-</m:mo>
+  <m:msup>
+   <m:mi>c</m:mi>
+   <m:mn>2</m:mn>
+  </m:msup>
+ </m:mrow>
+</m:apply>
+</m:math>
+</equation>
+</para>
+
+<para id="kk5">
+<emphasis>b</emphasis> can be obtained since the hypotenuse of each right triangle is equal to half the sample distance. A little trigonometry takes care of finding <emphasis>b</emphasis>:
+
+<equation id="trig">
+<m:math>
+<m:apply>
+<m:eq/>
+  <m:ci>theta</m:ci>
+<m:mrow>
+  <m:ci>acos</m:ci>
+  <m:mo>(</m:mo>
+  <m:apply>
+  <m:divide/>
+  <m:ci>c</m:ci>
+  <m:ci>hypotenuse</m:ci>
+  </m:apply>
+  <m:mo>)</m:mo>
+</m:mrow>
+</m:apply>
+</m:math>
+
+</equation>
+
+<equation id="trig2">
+<m:math>
+<m:apply>
+  <m:eq/>
+    <m:ci>b</m:ci>
+    <m:mrow>
+      <m:ci>hypotenuse</m:ci>
+      <m:ci>*</m:ci>
+      <m:mrow>
+       <m:ci>sin</m:ci>
+       <m:mo>(</m:mo>
+       <m:ci>theta</m:ci>
+       <m:mo>)</m:mo>
+      </m:mrow>
+    </m:mrow>
+</m:apply>
+</m:math>
+</equation>
+</para>
+
+<para id="kk6">
+Eccentricity <emphasis>e</emphasis> is simply defined as:
+
+<equation id="eccentricity">
+<m:math>
+ <m:apply>
+  <m:eq/>
+   <m:ci>e</m:ci>
+   <m:apply>
+    <m:divide/>
+    <m:ci>c</m:ci>
+    <m:ci>a</m:ci>
+   </m:apply>
+ </m:apply>
+</m:math>
+</equation>
+</para>
+
+<para id="kk7">
+We then plug all this into <term>Equation (6)</term> and get a vector of radii for all <emphasis>phi</emphasis> between pi and 2*pi (the negative half of the unit circle).
+</para>
+
+<para id="kk8">
+
+This vector is mapped to the image grid via the matlab command <term>pol2cart</term> and the shifted by <emphasis>c</emphasis> to bring the ellipse into line with the focii (source and receiver).
+</para>
+
+<para id="kk9">
+Finally, the value of the time sample is then added to these grid coordinates. The process is repeated for each source-receiver time vector.
+</para>
+
+</section>
+
+
+
+
+
+
+<section id="time">
+<title> Time Comparison </title>
+<para id="aa">
+Both methods require treating each of the 4096 vectors separately and traversing the vectors one by one.  Therefore, we can talk about efficiency in terms of the time required to process one vector and extrapolate this to total processing time.  Without any optimizations, both methods take several seconds to process one vector, which means that total process time is on the order of 5-10 hours.  So how can we reduce these times?  Well, one obvious answer would be to use a different computing simulator or work with a language more optimized for this type of processing.  However, for our purposes, let’s only consider optimizations to the actual algorithms.
+</para>
+
+<para id="aaa">
+For method one, the main factor we can control is the size of the grid.  We may greatly reduce our processing time by simply searching a smaller grid.  The idea  is to traverse the entire grid for the first few vectors and then to only traverse the areas where the magnitude is greater than some threshold. It is possible, in this way, to decrease the area by a factor of 2-10 and thus improve the speed.
+</para>
+
+<para id="aaaa">
+For method two, we set a threshold value and only consider time samples above this value.  This is helpful in eliminating all of the zero values in the early part of the time vectors that occur before any pulse returns.  We must be careful however in this optimization because if we set the threshold too high, we will be hurting our resolution and/or creating noise in the graph.
+</para>
+
+    <table frame="all" id="speed_table" summary="">
+	  <title>Algorithm Timing Comparison (approx. times)</title>
+	  <tgroup cols="4" align="left" colsep="1" rowsep="1">
+	    <colspec colnum="2" colname="c2"/>
+	    <colspec colnum="4" colname="c4"/>
+	    <thead valign="top">
+	      <row>
+	        <entry morerows="1" align="center">Experiment</entry>
+	        <entry namest="c2" nameend="c4" align="center">Algorithm</entry>
+	      </row>
+	      <row>
+	        <entry align="center">Method 1</entry>
+	        <entry align="center">Method 2</entry>
+	      </row>
+	    </thead>
+	    <tbody valign="top">
+	      <row>
+	        <entry>Mountain (Full Algorithm)</entry>
+	        <entry>10-12 sec</entry>
+	        <entry>5 sec</entry>
+	      </row>
+	      <row>
+	        <entry>Mountain (Optimized)</entry>
+	        <entry>3-4 sec</entry>
+	        <entry>1-2 sec</entry>
+	      </row>
+	      <row>
+	        <entry>ELEC (Optimized)</entry>
+	        <entry>5-6 sec</entry>
+	        <entry>3-4 sec</entry>
+	      </row>
+	    </tbody>
+	  </tgroup>
+	</table>
+	
+</section>
+
+
+
+
+<section id="res">
+<title>Resolution Comparison</title>
+<para id="bb">
+Here are two pictures of the same image reconstructed using each method
+</para>   
+
+   <figure orient="horizontal" id="image_comp">
+	    <subfigure id="method1">
+	      <media id="idp377696" alt=""><image src="../../media/ELEC_filtered.gif" mime-type="image/gif"/></media>
+              <caption>Image from Method 1
+              </caption>
+	    </subfigure>
+	    <subfigure id="subfig2">
+	      <media id="idp9565024" alt=""><image src="../../media/ELEC_unf_method2.jpg" mime-type="image/jpeg"/></media>
+              <caption>Image from Method 2</caption>
+	    </subfigure>
+	  </figure>
+	 
+<para id="bbb">
+As you can see, Method 1 shows details much more clearly because it uses a linear interpolation formula, while Method 2 rounds off the ellipse coordinates to fit them to the grid.  This means that method one should be more accurate and should show less error from the discrete nature of the samples.  Method 2 is faster, but method 1 shows higher resolution.
+</para>
+
+<para id="download">
+You can download copies of the matlab code for <link resource="ElipsePlot.m">method 1</link>, the <link resource="MO_Wrap.m">optimizing wrapper for method 1</link>
+and <link resource="TimeEllipse.m">method 2</link>.
+
+</para>
+</section>
+
+   
+  </content>
+  
+</document>

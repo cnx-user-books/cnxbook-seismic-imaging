@@ -1,0 +1,25 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
+	<title>Introduction to Filtering</title>
+	<metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>cb09fc65-cb46-4f38-8bec-a043e3a3bc98</md:uuid>
+</metadata>
+	<content>
+		<para id="intro_para">The data we get back from the seismic experiments will be in the form of a matrix of time series vectors. These vectors of course will have a certain amount of noise polluting the signal. In order to make any sense of the data we first have to filter these vectors to remove the unnecessary noise. It is only after filtering the data that we can hope to get a clear picture after imaging. <!-- Insert module text here --></para>
+		<para id="step_intro">Ok, so let’s look at some simple models for a signal with noise. A simple case would be where the signal and the noise are in separate bandwidths in the frequency domain. With this knowledge we can chart a basic simple filtering algorithm.</para>
+		<para id="step1"><term>Step 1:</term> Take the Fourier Transform of the data, so that we can look at it in the frequency domain.</para>
+		<para id="step2"><term>Step 2:</term> Looking at the spectrum we pinpoint the particular bandwidths where the signal is located and where the noise is located.</para>
+		<para id="step3"><term>Step 3:</term> We develop a standard Band pass filter that only allows the bandwidths in which the signal “lives” to come through.</para>
+		<para id="step4"><term>Step 4:</term> Now that we have our data outputted by the Band Pass filter, we are ready to send it for processing.</para>
+		<para id="figures"><figure orient="vertical" id="bandpass_filter">
+				<media id="idp544480" alt=""><image src="../../media/bpf1.gif" mime-type="image/gif"/></media>
+				<caption>Bandpass filter</caption>
+			</figure><figure orient="vertical" id="unfiltered">
+				<media id="idp8019088" alt=""><image src="../../media/bpf2.gif" mime-type="image/gif"/></media>
+				<caption>Unfiltered spectrum</caption>
+			</figure><figure orient="vertical" id="filtered">
+				<media id="idp8609360" alt=""><image src="../../media/bpf3.gif" mime-type="image/gif"/></media>
+				<caption>Filtered Spectrum</caption>
+			</figure></para>
+		<para id="stuff">This is a very simplistic model for filtering noise out of a signal. In real life, it is very unlikely that the signal and noise will live in separate bandwidths in the frequency domain. What is much more likely is that the signal and noise will overlap across a sizeable amount of the spectrum. Clearly no simple filter (like the Bandpass ) can filter out the noise adequately from the received signal. </para>
+		<para id="conc">Clearly a more sophisticated approach for filtering is required. In the next section we will take a look at just such a technique; something so wonderful that has the potential to solve all of our problems. </para>
+	</content>
+</document>
