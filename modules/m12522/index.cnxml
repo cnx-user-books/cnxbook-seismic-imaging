@@ -196,7 +196,7 @@
 			</figure></para>
 		<para id="she_really_dont_like_it">Just by looking at the noise spectrum we want, we look for patterns we could fit a mathematical formula to. In this example you can see that the function decays like a polynomial on one side and exponentially on the other. </para>
 		<para id="dumdumdum">So our general noise toggling function becomes:<equation id="noise_formula">
-				<m:math/>
+				
 			</equation></para>
 		<para id="counting_crows">And so we fix our parameters alpha, beta and gamma until we get something that resembles the function we drew in red earlier. <note type="Note" id="nothin_bout_love"><label>Note</label>This function is particular to this data set. For other types of noise, you would have to fit a new appropriate noise function.  </note></para>
 		<para id="breakfast">So now using the values we calculated for X(f) and N(f) we create our wiener filter.<figure orient="vertical" id="wiener_filter">
